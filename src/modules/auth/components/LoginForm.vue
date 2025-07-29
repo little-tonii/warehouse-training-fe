@@ -100,13 +100,24 @@ const rules = {
 // Form reference
 const formRef = ref()
 
+import { useRouter } from 'vue-router'
+
+// Router
+const router = useRouter()
+
 // Methods
 const handleLogin = async () => {
   const { valid } = await formRef.value?.validate()
   
   if (valid) {
-    // Your login logic here
-    console.log('Login attempt:', form)
+    try {
+      await authStore.login(form)
+      // Redirect to dashboard after successful login
+      router.push('/')
+    } catch (error) {
+      // Error is already handled in store
+      console.error('Login failed:', error)
+    }
   }
 }
 
