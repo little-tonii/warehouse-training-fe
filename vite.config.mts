@@ -7,6 +7,7 @@ import Fonts from 'unplugin-fonts/vite'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,7 +17,7 @@ export default defineConfig({
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify(),
-    Components(),
+    // Components(), // Disabled for modular structure
     Fonts({
       fontsource: {
         families: [
@@ -28,6 +29,7 @@ export default defineConfig({
         ],
       },
     }),
+    tailwindcss(),
   ],
   optimizeDeps: {
     exclude: ['vuetify'],
