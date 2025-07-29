@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
       // Ưu tiên lấy từ state, nếu không có thì lấy từ localStorage
       if (this.accessToken) return this.accessToken
       
-      const token = localStorage.getItem('accessToken')
+      const token = localStorage.getItem('access_token')
       if (token) {
         this.accessToken = token
         return token
@@ -72,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
     
     // Initialize auth state from localStorage
     initAuth() {
-      const token = localStorage.getItem('accessToken')
+      const token = localStorage.getItem('access_token')
       if (token) {
         this.accessToken = token
       }
