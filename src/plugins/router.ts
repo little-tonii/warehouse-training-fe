@@ -17,6 +17,12 @@ const routes: RouteRecordRaw[] = [
         name: 'Inbound',
         component: () => import('../modules/inbound/views/InboundView.vue'),
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('../modules/not-found/views/NotFound.vue'),
+        meta: { requiresAuth: false },
+    },
 ];
 
 const router = createRouter({

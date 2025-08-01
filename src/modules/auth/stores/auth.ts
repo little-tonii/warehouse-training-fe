@@ -4,51 +4,63 @@ import { defineStore } from 'pinia';
 const api = import.meta.env.VITE_API_BASE_URL;
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: null as any,
-        isAuthenticated: false,
+        accessToken: null as string | null,
         loading: false,
         error: null as string | null,
     }),
 
     getters: {
-        // Add your getters here
+        isAuthenticated: state => !!state.accessToken,
+        hasAccessToken: state => !!state.accessToken,
     },
 
     actions: {
-        // Add your login logic here
+        setAccessToken(token: string) {
+            this.accessToken = token;
+            // Lưu vào localStorage để persist
+            localStorage.setItem('accessToken', token);
+        },
+
+        getAccessToken(): string | null {
+            // Ưu tiên lấy từ state, nếu không có thì lấy từ localStorage
+            if (this.accessToken) return this.accessToken;
+
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                this.accessToken = token;
+                return token;
+            }
+
+            return null;
+        },
+
+        clearAccessToken() {
+            this.accessToken = null;
+            localStorage.removeItem('accessToken');
+        },
+
         async login(credentials: { username: string; password: string }) {
-            // Your login implementation
             this.setLoading(true);
             this.setError(null);
+
             try {
-                const { username, password } = credentials;
-                const response = await axios.post(`${api}/auth/login`, {
-                    username,
-                    password,
-                });
+                // Your login API call here
+                // const response = await authAPI.login(credentials)
+                // this.setAccessToken(response.accessToken)
 
-                const token = response.data.access_token;
-                localStorage.setItem('token', token);
-                this.isAuthenticated = true;
-
-                axios.defaults.headers.common[
-                    'Authorization'
-                ] = `Bearer ${token}`;
-            } catch (err: any) {
-                this.setError(
-                    err.response?.data?.message || 'Đăng nhập thất bại'
-                );
+                // Demo: Simulate successful login
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                this.setAccessToken('demo-access-token-123');
+            } catch (error) {
+                this.setError('Đăng nhập thất bại');
+                throw error;
             } finally {
                 this.setLoading(false);
             }
         },
 
         logout() {
-            // Your logout implementation
-            localStorage.removeItem('token');
-            this.user = null;
-            this.isAuthenticated = false;
-            delete axios.defaults.headers.common['Authorization'];
+            this.clearAccessToken();
         },
 
         setLoading(loading: boolean) {
@@ -57,6 +69,14 @@ export const useAuthStore = defineStore('auth', {
 
         setError(error: string | null) {
             this.error = error;
+        },
+
+        // Initialize auth state from localStorage
+        initAuth() {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                this.accessToken = token;
+            }
         },
     },
 });

@@ -44,11 +44,12 @@ const showDropdown = ref(false);
     max-height: 50px;
 }
 .dropdown {
-    border: 1px grey solid;
+    border-top: 1px grey solid;
     position: absolute;
     width: 180px;
     right: 0;
     background-color: #aeddff;
+    box-sizing: border-box;
 }
 .dropdown li {
     padding: 10px 0px 5px 5px;
