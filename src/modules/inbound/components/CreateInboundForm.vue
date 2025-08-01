@@ -1,15 +1,57 @@
 <script setup>
 import { ref } from 'vue';
+import api from '@/plugins/axios';
 const form = ref({
     invoice: '',
     productType: '',
     supplierCd: '',
     receiveDate: '',
-    orderStatus: '',
-    quantity: 0,
+    orderStatus: '0',
+    quantity: null,
+    attachments: [],
 });
-const onSubmit = () => {
+
+const handleFileChange = event => {
+    form.value.attachments = Array.from(event.target.files);
+};
+
+const onSubmit = async () => {
     console.log(form.value);
+    try {
+        const formData = new FormData();
+        formData.append('invoice', form.value.invoice);
+        formData.append('productType', form.value.productType);
+        formData.append('supplierCd', form.value.supplierCd);
+        formData.append('receiveDate', form.value.receiveDate);
+        formData.append('orderStatus', form.value.orderStatus);
+        formData.append('quantity', form.value.quantity.toString());
+        console.log(formData);
+
+        for (let i = 0; i < form.value.attachments.length; i++) {
+            formData.append('attachments', form.value.attachments[i]);
+        }
+
+        const response = await api.post('/inbound', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.log('Success:', response.data);
+        alert('Create inbound success');
+        form.value = {
+            invoice: '',
+            productType: '',
+            supplierCd: '',
+            receiveDate: '',
+            orderStatus: '0',
+            quantity: null,
+            attachments: [],
+        };
+    } catch (error) {
+        console.error('Error: ', error);
+        alert('Failed create inbound');
+    }
 };
 </script>
 <template>
@@ -59,7 +101,7 @@ const onSubmit = () => {
             <label class="inbound-form__label">Receive Date</label>
             <input
                 class="inbound-form__input"
-                type="date"
+                type="datetime-local"
                 v-model="form.receiveDate"
                 required
             />
@@ -71,8 +113,15 @@ const onSubmit = () => {
                 class="inbound-form__input"
                 type="number"
                 v-model="form.quantity"
-                min="1"
-                required
+            />
+        </div>
+        <div class="inbound-form__field">
+            <label class="inbound-form__label">Attachments</label>
+            <input
+                class="inbound-form__input"
+                type="file"
+                multiple
+                @change="handleFileChange"
             />
         </div>
 
@@ -100,6 +149,16 @@ const onSubmit = () => {
 }
 .inbound-form__input {
     width: 35%;
-    background-color: rgb(255, 255, 255);
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-family: sans-serif;
+    padding-left: 2%;
+}
+.inbound-form__submit {
+    background-color: #2a7dd1;
+    color: wheat;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: bold;
 }
 </style>

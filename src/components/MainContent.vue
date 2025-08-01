@@ -11,6 +11,6 @@
     border-radius: 15px;
     width: 100vw;
     padding: 5px;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
 }
 </style>
