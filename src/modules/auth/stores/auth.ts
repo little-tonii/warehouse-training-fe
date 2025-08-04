@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
 
-const api = import.meta.env.VITE_API_BASE_URL;
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         accessToken: null as string | null,
@@ -44,13 +44,15 @@ export const useAuthStore = defineStore('auth', {
             this.setError(null);
 
             try {
-                // Your login API call here
-                // const response = await authAPI.login(credentials)
-                // this.setAccessToken(response.accessToken)
+                const response = axios.post(
+                    `${baseURL}/auth/login`,
+                    credentials
+                );
 
-                // Demo: Simulate successful login
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                this.setAccessToken('demo-access-token-123');
+                const token = (await response).data.access_token;
+                if (token) {
+                    this.setAccessToken(token);
+                }
             } catch (error) {
                 this.setError('Đăng nhập thất bại');
                 throw error;
