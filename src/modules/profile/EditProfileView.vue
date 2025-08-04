@@ -1,6 +1,7 @@
 <script setup>
 import Sidebar from '@/components/Sidebar.vue';
 import MainContent from '@/components/MainContent.vue';
+import EditProfileForm from './EditProfileForm.vue';
 </script>
 <template>
     <div class="layout">
