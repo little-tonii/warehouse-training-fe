@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
             // Ưu tiên lấy từ state, nếu không có thì lấy từ localStorage
             if (this.accessToken) return this.accessToken;
 
-            const token = localStorage.getItem('access_token');
+            const token = localStorage.getItem('accessToken');
             if (token) {
                 this.accessToken = token;
                 return token;
