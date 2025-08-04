@@ -110,7 +110,7 @@ const handleLogin = async () => {
     if (valid) {
         // Your login logic here
         await authStore.login(form);
-        if (authStore.isAuthenticated === true) router.push('/home');
+        if (authStore.isAuthenticated === true) router.push('/dashboard');
         console.log('Login attempt:', form);
     }
 };
