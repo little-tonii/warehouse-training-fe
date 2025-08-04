@@ -9,8 +9,6 @@ import CreateInboundForm from '@/modules/inbound/components/CreateInboundForm.vu
             <Sidebar />
         </div>
         <MainContent>
-            <h1>Welcome to Home</h1>
-            <p>This is the main content area.</p>
             <div class="inbound-form-wrapper">
                 <label class="label-form">Inbound Form</label>
                 <CreateInboundForm />
@@ -32,8 +30,6 @@ import CreateInboundForm from '@/modules/inbound/components/CreateInboundForm.vu
 }
 .inbound-form-wrapper {
     padding: 15px;
-    border: #01274d solid 1px;
-    box-sizing: border-box;
 }
 .label-form {
     text-align: center;
