@@ -8,9 +8,9 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../modules/auth/views/Login.vue'),
     },
     {
-        path: '/home',
-        name: 'Home',
-        component: () => import('../views/HomeView.vue'),
+        path: '/dashboard',
+        name: 'dashboard',
+        component: () => import('../views/DashboardView.vue'),
     },
     {
         path: '/inbound',
