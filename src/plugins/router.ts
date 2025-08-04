@@ -30,6 +30,17 @@ const routes: RouteRecordRaw[] = [
         name: 'EditProfile',
         component: () => import('../modules/profile/EditProfileView.vue'),
     },
+    {
+        path: '/inbounds-list',
+        name: 'Inbounds',
+        component: () => import('../modules/inbound/views/InboundListView.vue'),
+    },
+    {
+        path: '/inbounds-list/:id',
+        name: 'InboundDetail',
+        component: () =>
+            import('../modules/inbound/views/InboundDetailView.vue'),
+    },
 ];
 
 const router = createRouter({

@@ -1,10 +1,14 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
-
+const router = useRouter();
 const route = useRoute();
-const activeItem = ref('dashboard');
 const isActive = path => route.path.startsWith(path);
+const goToInboundList = () => {
+    router.push('/inbounds-list');
+};
+const showDropdown = ref(true);
 </script>
 <template>
     <aside class="sidebar">
@@ -12,8 +16,17 @@ const isActive = path => route.path.startsWith(path);
             <li :class="['menu-item', isActive('/dashboard') && 'active']">
                 <router-link to="/dashboard">Dashboard</router-link>
             </li>
-            <li :class="['menu-item', isActive('/inbound') && 'active']">
+            <li
+                :class="['menu-item', isActive('/inbound') && 'active']"
+                @mouseenter="showDropdown = true"
+                @mouseleave="showDropdown = false"
+            >
                 <router-link to="/inbound">Inbounds</router-link>
+                <div class="dropdown" v-if="showDropdown">
+                    <ul>
+                        <li @click="goToInboundList">Update Inbound</li>
+                    </ul>
+                </div>
             </li>
             <li :class="['menu-item', isActive('outbound') && 'active']">
                 <router-link to="#">Outbounds</router-link>
@@ -36,6 +49,7 @@ const isActive = path => route.path.startsWith(path);
     font-weight: bold;
     color: antiquewhite;
     background-color: #124f71;
+    position: relative;
 }
 .menu-item.active {
     background-color: #124f71;
@@ -43,5 +57,18 @@ const isActive = path => route.path.startsWith(path);
 }
 .menu {
     height: 100vh;
+}
+
+.dropdown {
+    position: absolute;
+    right: -50%;
+    background: #0d355c;
+    color: #00468c;
+    z-index: 1;
+    background-color: #aeddff;
+}
+.dropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
 }
 </style>
