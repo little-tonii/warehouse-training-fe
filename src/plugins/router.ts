@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: '/dashboard',
-        name: 'dashboard',
+        name: 'Dashboard',
         component: () => import('../views/DashboardView.vue'),
     },
     {
@@ -47,10 +47,10 @@ router.beforeEach((to, from, next) => {
     console.log('isLoggedIn:', isLoggedIn);
     console.log('isPublic:', isPublic);
 
-    if (to.path === '/login' && isLoggedIn) {
+    if (to.name === 'Login' && isLoggedIn) {
         next('/dashboard');
     } else if (!isLoggedIn && !isPublic) {
-        next('/login');
+        next('/');
     } else {
         next();
     }

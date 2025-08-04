@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { useAuthStore } from '@/modules/auth/stores/auth';
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
     timeout: 10000,
@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('accessToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -19,8 +19,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     response => response,
     error => {
+        const authStore = useAuthStore();
         if (error.response?.status === 401) {
-            window.location.href = '/login';
+            authStore.clearAccessToken();
+            window.location.href = '/';
         }
 
         console.error(
