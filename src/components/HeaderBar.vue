@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const showDropdown = ref(false);
+const goToProfile = () => {
+    router.push('/profile/edit');
+};
 </script>
 <template>
     <header class="header">
@@ -13,7 +18,7 @@ const showDropdown = ref(false);
                 <img class="img" src="../assets/logo.png" />
                 <div v-if="showDropdown" class="dropdown">
                     <ul>
-                        <li>Chỉnh sửa thông tin</li>
+                        <li @click="goToProfile">Chỉnh sửa thông tin</li>
                         <li>Đăng xuất</li>
                     </ul>
                 </div>

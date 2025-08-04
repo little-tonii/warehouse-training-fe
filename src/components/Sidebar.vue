@@ -1,11 +1,26 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const activeItem = ref('dashboard');
+const isActive = path => route.path.startsWith(path);
+</script>
 <template>
     <aside class="sidebar">
         <ul class="menu">
-            <li class="menu-item"><a href="#">Dashboard</a></li>
-            <li class="menu-item active"><a href="/inbound">Inbounds</a></li>
-            <li class="menu-item"><a href="#">Outbounds</a></li>
-            <li class="menu-item"><a href="#">Reports</a></li>
+            <li :class="['menu-item', isActive('/dashboard') && 'active']">
+                <router-link to="/dashboard">Dashboard</router-link>
+            </li>
+            <li :class="['menu-item', isActive('/inbound') && 'active']">
+                <router-link to="/inbound">Inbounds</router-link>
+            </li>
+            <li :class="['menu-item', isActive('outbound') && 'active']">
+                <router-link to="#">Outbounds</router-link>
+            </li>
+            <li :class="['menu-item', isActive('/reports') && 'active']">
+                <router-link to="#">Reports</router-link>
+            </li>
         </ul>
     </aside>
 </template>
