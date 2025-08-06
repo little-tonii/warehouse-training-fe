@@ -2,6 +2,10 @@
 import Sidebar from '@/components/Sidebar.vue';
 import MainContent from '@/components/MainContent.vue';
 import InboundDetail from '../components/InboundDetail.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const id = route.params.id;
 </script>
 <template>
     <div class="layout">
@@ -11,7 +15,7 @@ import InboundDetail from '../components/InboundDetail.vue';
         <MainContent>
             <div class="inbound-form-wrapper">
                 <label class="label-form">Inbound Detail</label>
-                <InboundDetail />
+                <InboundDetail :id="id" />
             </div>
         </MainContent>
     </div>
