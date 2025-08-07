@@ -6,7 +6,9 @@ import {
     ProductTypeValueMap,
     SupplierCdValueMap,
 } from '@/constants/enums';
+import { error } from 'console';
 
+const domainDB = import.meta.env.VTIE_DOMAIN;
 const props = defineProps({
     id: Number,
 });
@@ -55,6 +57,13 @@ const updateInbound = async () => {
     }
 };
 
+const downloadFile = async () => {
+    try {
+        console.log();
+    } catch (error) {
+        console.error(error);
+    }
+};
 onMounted(fetchDetail);
 </script>
 
@@ -136,7 +145,7 @@ onMounted(fetchDetail);
             <label class="inbound-form__label">Attachments</label>
             <input class="inbound-form__input" type="file" />
 
-            <button type="button" @click="downloadFile">+</button>
+            <button type="button" @click="downloadFile">⬇</button>
         </div>
 
         <button class="inbound-form__submit" type="submit">Update</button>

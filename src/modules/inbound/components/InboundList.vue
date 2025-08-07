@@ -25,6 +25,19 @@ const goToDetail = id => {
     router.push(`/inbounds-list/${id}`);
 };
 
+const handleDel = async id => {
+    if (!confirm('Sure?')) return;
+
+    try {
+        await axios.delete(`/inbound/${id}`);
+
+        inbounds.value = inbounds.value.filter(item => item.id !== id);
+        alert('Success');
+    } catch (err) {
+        console.error('Delete failed:', err);
+        alert('Failed');
+    }
+};
 onMounted(fetchInbounds);
 </script>
 
@@ -35,19 +48,31 @@ onMounted(fetchInbounds);
         class="inbound-item"
         @click="goToDetail(item.id)"
     >
-        <h3>Invoice: {{ item.invoice }}</h3>
-        <p>Loại sản phẩm: {{ item.product_type }}</p>
-        <p>Nhà cung cấp: {{ item.supplier_cd }}</p>
-        <p>Số lượng: {{ item.quantity }}</p>
-        <p>
-            Ngày nhận:
-            {{ new Date(item.receive_date).toLocaleDateString() }}
-        </p>
-        <p>Người tạo: {{ item.creator.full_name }}</p>
+        <div class="inbound-content">
+            <h3>Invoice: {{ item.invoice }}</h3>
+            <p>Loại sản phẩm: {{ item.product_type }}</p>
+            <p>Nhà cung cấp: {{ item.supplier_cd }}</p>
+            <p>Số lượng: {{ item.quantity }}</p>
+            <p>
+                Ngày nhận:
+                {{ new Date(item.receive_date).toLocaleDateString() }}
+            </p>
+            <p>Người tạo: {{ item.creator.full_name }}</p>
+        </div>
+        <div class="delete-btn" @click.stop="handleDel(item.id)">
+            <p>Delete</p>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.delete-btn {
+    background-color: red;
+    text-align: center;
+    color: white;
+    max-width: 100px;
+    padding: 5px;
+}
 .inbound-list {
     padding: 24px;
     max-width: 800px;
