@@ -42,41 +42,43 @@ onMounted(fetchInbounds);
 </script>
 
 <template>
-    <div
-        v-for="item in inbounds"
-        :key="item.id"
-        class="inbound-item"
-        @click="goToDetail(item.id)"
-    >
-        <div class="inbound-content">
-            <h3>Invoice: {{ item.invoice }}</h3>
-            <p>Loại sản phẩm: {{ item.product_type }}</p>
-            <p>Nhà cung cấp: {{ item.supplier_cd }}</p>
-            <p>Số lượng: {{ item.quantity }}</p>
-            <p>
-                Ngày nhận:
-                {{ new Date(item.receive_date).toLocaleDateString() }}
-            </p>
-            <p>Người tạo: {{ item.creator.full_name }}</p>
-        </div>
-        <div class="delete-btn" @click.stop="handleDel(item.id)">
-            <p>Delete</p>
+    <div class="inbounds-wrapper">
+        <div
+            v-for="item in inbounds"
+            :key="item.id"
+            class="inbound-item"
+            @click="goToDetail(item.id)"
+        >
+            <div class="inbound-content">
+                <h3>Invoice: {{ item.invoice }}</h3>
+                <p>Loại sản phẩm: {{ item.product_type }}</p>
+                <p>Nhà cung cấp: {{ item.supplier_cd }}</p>
+                <p>Số lượng: {{ item.quantity }}</p>
+                <p>
+                    Ngày nhận:
+                    {{ new Date(item.receive_date).toLocaleDateString() }}
+                </p>
+                <p>Người tạo: {{ item.creator.full_name }}</p>
+            </div>
+            <div class="delete-btn" @click.stop="handleDel(item.id)">
+                <p>Delete</p>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.inbounds-wrapper {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    padding-right: 8px;
+}
 .delete-btn {
     background-color: red;
     text-align: center;
     color: white;
     max-width: 100px;
     padding: 5px;
-}
-.inbound-list {
-    padding: 24px;
-    max-width: 800px;
-    margin: auto;
 }
 
 .inbound-item {

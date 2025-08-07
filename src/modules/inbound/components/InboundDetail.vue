@@ -6,7 +6,6 @@ import {
     ProductTypeValueMap,
     SupplierCdValueMap,
 } from '@/constants/enums';
-import { error } from 'console';
 
 const domainDB = import.meta.env.VTIE_DOMAIN;
 const props = defineProps({
@@ -20,6 +19,7 @@ const formData = ref({
     receiveDate: '',
     orderStatus: '',
     quantity: '',
+    attachments: [],
 });
 
 const fetchDetail = async () => {
@@ -33,6 +33,11 @@ const fetchDetail = async () => {
         formData.value.orderStatus = data.order_status;
         formData.value.quantity = data.quantity;
 
+        formData.value.attachments = (data.attachments || []).map(f => ({
+            ...f,
+            file: null,
+            _deleted: false,
+        }));
         console.log(data);
     } catch (error) {
         console.error(error);
@@ -57,13 +62,18 @@ const updateInbound = async () => {
     }
 };
 
-const downloadFile = async () => {
+const downloadFile = async (inbId, attachmnentId) => {
     try {
-        console.log();
+        console.log(`${inbId} ${attachmnentId}`);
+        const responseURL = await api.get(
+            `/inbound/${inbId}/attachment/${attachmnentId}/download-url`
+        );
+        console.log(responseURL);
     } catch (error) {
         console.error(error);
     }
 };
+const removeAttachment = index => {};
 onMounted(fetchDetail);
 </script>
 
@@ -143,9 +153,32 @@ onMounted(fetchDetail);
 
         <div class="inbound-form__field">
             <label class="inbound-form__label">Attachments</label>
-            <input class="inbound-form__input" type="file" />
 
-            <button type="button" @click="downloadFile">⬇</button>
+            <div class="inbound_attachments_wrapper">
+                <div
+                    class="attachment_wrapper"
+                    v-for="(fileObj, index) in formData.attachments"
+                    :key="fileObj.id"
+                >
+                    <input class="inbound-form__input-attachment" type="file" />
+
+                    <div class="old-file">
+                        <label>Current file:</label>
+                        <label> {{ fileObj.file_name }}</label>
+                        <div class="btn-wrapper">
+                            <button type="button" @click="delFile(index)">
+                                ❌
+                            </button>
+                            <button
+                                type="button"
+                                @click="downloadFile(props.id, fileObj.id)"
+                            >
+                                ⬇
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <button class="inbound-form__submit" type="submit">Update</button>
@@ -154,6 +187,32 @@ onMounted(fetchDetail);
 <style lang="css" scoped>
 .inbound-form {
     width: 100%;
+}
+.attachment_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
+.inbound_attachments_wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.btn-wrapper {
+    max-width: 30%;
+    right: 0px;
+}
+.inbound-form__input-attachment {
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-family: sans-serif;
+}
+.old-file {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .inbound-form__field {
     margin: 20px 0px;

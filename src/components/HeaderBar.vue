@@ -28,6 +28,7 @@ const goToProfile = () => {
 </template>
 <style scoped>
 .header {
+    top: 0;
     position: sticky;
     background-color: #00468c;
     height: 75px;

@@ -12,8 +12,8 @@ import HeaderBar from './HeaderBar.vue';
 <style>
 .main-content {
     width: 100vw;
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
 }
 .content {
     margin: 20px 30px 30px 20px;
@@ -21,6 +21,5 @@ import HeaderBar from './HeaderBar.vue';
     border-radius: 15px;
     padding: 5px;
     background-color: rgb(255, 255, 255);
-    flex: auto;
 }
 </style>
