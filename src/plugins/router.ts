@@ -41,6 +41,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
             import('../modules/inbound/views/InboundDetailView.vue'),
     },
+    {
+        path: '/inbound/import',
+        name: 'ImportInbound',
+        component: () =>
+            import('../modules/inbound/views/ImportInboundView.vue'),
+    },
 ];
 
 const router = createRouter({

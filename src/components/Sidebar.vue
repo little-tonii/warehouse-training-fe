@@ -8,6 +8,7 @@ const isActive = path => route.path.startsWith(path);
 const goToInboundList = () => {
     router.push('/inbounds-list');
 };
+const goToImportInbound = () => router.push('/inbound/import');
 const showDropdown = ref(true);
 </script>
 <template>
@@ -25,6 +26,7 @@ const showDropdown = ref(true);
                 <div class="dropdown" v-if="showDropdown">
                     <ul>
                         <li @click="goToInboundList">Update Inbound</li>
+                        <li @click="goToImportInbound">Import Inbound</li>
                     </ul>
                 </div>
             </li>
