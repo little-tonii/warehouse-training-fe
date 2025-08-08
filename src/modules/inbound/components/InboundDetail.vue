@@ -1,13 +1,12 @@
 <script setup>
 import api from '@/plugins/axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import {
     ExportStatusValueMap,
     ProductTypeValueMap,
     SupplierCdValueMap,
 } from '@/constants/enums';
 
-const domainDB = import.meta.env.VTIE_DOMAIN;
 const props = defineProps({
     id: Number,
 });
@@ -21,7 +20,14 @@ const formData = ref({
     quantity: '',
     attachments: [],
 });
-
+const paddedAttachments = computed(() => {
+    const files = [...formData.value.attachments];
+    for (let i = 0; i < 5 - formData.value.attachments.length; i++) {
+        files.push({ id: null, file: null, _deleted: false, file_name: null });
+    }
+    return files;
+});
+console.log(paddedAttachments);
 const fetchDetail = async () => {
     try {
         const { data } = await api.get(`/inbound/${props.id}`);
@@ -46,17 +52,31 @@ const fetchDetail = async () => {
 
 const updateInbound = async () => {
     try {
-        const payload = {
-            invoice: formData.value.invoice,
-            productType: ProductTypeValueMap[formData.value.productType],
-            supplierCd: SupplierCdValueMap[formData.value.supplierCd],
-            receiveDate: formData.value.receiveDate,
-            orderStatus: ExportStatusValueMap[formData.value.orderStatus],
-            quantity: formData.value.quantity,
-        };
-        await api.put(`/inbound/${props.id}`, payload);
+        const payload = new FormData();
+
+        payload.append('invoice', formData.value.invoice);
+        payload.append(
+            'productType',
+            ProductTypeValueMap[formData.value.productType]
+        );
+        payload.append(
+            'supplierCd',
+            SupplierCdValueMap[formData.value.supplierCd]
+        );
+        payload.append('receiveDate', formData.value.receiveDate);
+        payload.append(
+            'orderStatus',
+            ExportStatusValueMap[formData.value.orderStatus]
+        );
+        payload.append('quantity', formData.value.quantity);
+
+        for (let i = 0; i < formData.value.attachments.length; i++) {
+            payload.append('attachments', formData.value.attachments[i]);
+        }
+        // await api.put(`/inbound/${props.id}`, payload);
         console.log(payload);
         alert('Update thành công');
+        console.log(Array.from(payload.entries()));
     } catch (error) {
         console.error(error);
     }
@@ -64,16 +84,50 @@ const updateInbound = async () => {
 
 const downloadFile = async (inbId, attachmnentId) => {
     try {
-        console.log(`${inbId} ${attachmnentId}`);
+        if (inbId == null || attachmnentId == null)
+            alert('No file to download');
         const responseURL = await api.get(
             `/inbound/${inbId}/attachment/${attachmnentId}/download-url`
         );
-        console.log(responseURL);
+        const urlObj = new URL(responseURL.data.url);
+
+        console.log(urlObj.toString());
+        const a = document.createElement('a');
+        a.href = urlObj.toString();
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     } catch (error) {
         console.error(error);
     }
 };
-const removeAttachment = index => {};
+const removeAttachment = index => {
+    const att = paddedAttachments.value[index];
+    if (att.id) {
+        formData.value.attachments[index] = {
+            ...formData.value.attachments[index],
+            _deleted: true,
+            file_name: null,
+        };
+    } else {
+        formData.value.attachments[index] = {
+            ...formData.value.attachments[index],
+            file: null,
+            file_name: null,
+        };
+    }
+};
+const onFileChange = (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    formData.value.attachments[index] = {
+        ...formData.value.attachments[index],
+        file: file,
+        file_name: file.name,
+        _deleted: false,
+    };
+};
 onMounted(fetchDetail);
 </script>
 
@@ -157,16 +211,24 @@ onMounted(fetchDetail);
             <div class="inbound_attachments_wrapper">
                 <div
                     class="attachment_wrapper"
-                    v-for="(fileObj, index) in formData.attachments"
-                    :key="fileObj.id"
+                    v-for="(fileObj, index) in paddedAttachments"
+                    :key="fileObj.id ?? index"
                 >
-                    <input class="inbound-form__input-attachment" type="file" />
+                    <input
+                        class="inbound-form__input-attachment"
+                        type="file"
+                        :key="`${index}${fileObj.file_name}`"
+                        @change="e => onFileChange(e, index)"
+                    />
 
                     <div class="old-file">
                         <label>Current file:</label>
                         <label> {{ fileObj.file_name }}</label>
                         <div class="btn-wrapper">
-                            <button type="button" @click="delFile(index)">
+                            <button
+                                type="button"
+                                @click="removeAttachment(index)"
+                            >
                                 ❌
                             </button>
                             <button
