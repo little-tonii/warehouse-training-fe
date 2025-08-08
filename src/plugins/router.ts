@@ -47,6 +47,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
             import('../modules/inbound/views/ImportInboundView.vue'),
     },
+    {
+        path: '/statistic/inventory',
+        name: 'StatisticInventory',
+        component: () =>
+            import('../modules/statistic/views/StatisticInventoryView.vue'),
+    },
 ];
 
 const router = createRouter({

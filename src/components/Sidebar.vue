@@ -9,6 +9,7 @@ const goToInboundList = () => {
     router.push('/inbounds-list');
 };
 const goToImportInbound = () => router.push('/inbound/import');
+const goToStatisticInventory = () => router.push('/statistic/inventory');
 const showDropdown = ref(true);
 </script>
 <template>
@@ -33,8 +34,19 @@ const showDropdown = ref(true);
             <li :class="['menu-item', isActive('outbound') && 'active']">
                 <router-link to="#">Outbounds</router-link>
             </li>
-            <li :class="['menu-item', isActive('/reports') && 'active']">
+            <li
+                :class="['menu-item', isActive('/reports') && 'active']"
+                @mouseenter="showDropdown = true"
+                @mouseleave="showDropdown = false"
+            >
                 <router-link to="#">Reports</router-link>
+                <div class="dropdown" v-if="showDropdown">
+                    <ul>
+                        <li @click="goToStatisticInventory">
+                            Statistic Inventory
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </aside>

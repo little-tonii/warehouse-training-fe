@@ -1,0 +1,46 @@
+<script setup>
+import Sidebar from '@/components/Sidebar.vue';
+import StatisticInventoryContent from '../components/StatisticInventoryContent.vue';
+import MainContent from '@/components/MainContent.vue';
+</script>
+
+<template>
+    <div class="layout">
+        <div class="side-bar">
+            <Sidebar />
+        </div>
+        <MainContent>
+            <div class="stats-inventory-wrapper">
+                <label class="label-stats-inventory">Statistic Inventory</label>
+                <StatisticInventoryContent />
+            </div>
+        </MainContent>
+    </div>
+</template>
+<style lang="css" scoped>
+.layout {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f8f8f8;
+}
+.side-bar {
+    background-color: #01274d;
+    padding: 30px 0px;
+}
+.stats-inventory-wrapper {
+    padding: 15px;
+    height: 100%;
+}
+.label-stats-inventory {
+    text-align: center;
+    display: block;
+    font-size: 36px;
+    font-weight: bolder;
+    color: #01274d;
+    background-color: #f0f0f0;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+</style>
